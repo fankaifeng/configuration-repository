@@ -179,24 +179,24 @@ management:
 #  zuul:
 ## leading zuul网关host
 #    host: localhost
-security:
-  oauth2:
-    leading-client:
-      clientId: leading_task
-      clientSecret: leading_task
-      grantType: client_credentials
-      access-token-uri: http://${leading.zuul.host}/api/user-service/oauth/token
-      user-authorization-uri: http://${leading.zuul.host}/api/user-service/oauth/authorize
-      scope: custom_mod
-    resource:
-      filter-order: 3
-      #微服务使用auth-server进行认证授权，在它的配置文件指定用户信息在auth-server的地址即可
-      #security:
-      #  oauth2:
-      #    resource:
-      id: user-service
-      user-info-uri: http://${leading.zuul.host}:9001/user-service/user
-      prefer-token-info: false
+#security:
+#  oauth2:
+#    leading-client:
+#      clientId: leading_task
+#      clientSecret: leading_task
+#      grantType: client_credentials
+#      access-token-uri: http://${leading.zuul.host}/api/user-service/oauth/token
+#      user-authorization-uri: http://${leading.zuul.host}/api/user-service/oauth/authorize
+#      scope: custom_mod
+#    resource:
+#      filter-order: 3
+#      #微服务使用auth-server进行认证授权，在它的配置文件指定用户信息在auth-server的地址即可
+#      #security:
+#      #  oauth2:
+#      #    resource:
+#      id: user-service
+#      user-info-uri: http://${leading.zuul.host}:9001/user-service/user
+#      prefer-token-info: false
 
 eureka:
   instance:
