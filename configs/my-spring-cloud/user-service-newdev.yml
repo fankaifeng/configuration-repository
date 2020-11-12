@@ -140,19 +140,19 @@ spring:
                 password: leading2018
                 virtual-host: /
   # flyway自动构建数据库脚本
-  flyway:
-    #日志表
-    table: schema_user_service_log
-    baseline-on-migrate: true
-    #启动时不检查文件记录，建议线上为true
-    validate-on-migrate: false
-    #是否允许乱序（out of order）迁移 默认为false
-    out-of-order: true
-    url: ${sharding.jdbc.data-sources.dbmaster.url}
-    user: flywayUser
-    password: flyway123456
-    enabled: true
-    encoding: utf-8
+#  flyway:
+#    #日志表
+#    table: schema_user_service_log
+#    baseline-on-migrate: true
+#    #启动时不检查文件记录，建议线上为true
+#    validate-on-migrate: false
+#    #是否允许乱序（out of order）迁移 默认为false
+#    out-of-order: true
+#    url: ${sharding.jdbc.data-sources.dbmaster.url}
+#    user: flywayUser
+#    password: flyway123456
+#    enabled: true
+#    encoding: utf-8
   # 服务链路追踪Zipkin Server地址，如果使用mq发送，就不需要了
   #  zipkin:
   #    base-url: http://localhost:9411
