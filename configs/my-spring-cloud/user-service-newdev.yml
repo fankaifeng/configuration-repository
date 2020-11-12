@@ -1,0 +1,276 @@
+#leading:
+#  authorizationConfig: true
+#  #runnable线程池配置
+#  runnableThreadPool:
+#    corePoolSize: 100
+#    maximumPoolSize: 2000
+#    #表示线程没有任务执行时最多保持多久时间会终止
+#    keepAliveTime: 10
+#    #keepAliveTime的时间单位 DAYS 天/HOURS 小时/MINUTES 分钟/SECONDS 秒/MILLISECONDS 毫秒/MICROSECONDS 微妙/NANOSECONDS 纳秒
+#    unit: SECONDS
+#    #ArrayBlockingQueue：有界队列；LinkedBlockingQueue：无界队列
+#    workQueue: ArrayBlockingQueue
+#    queueSize: 1
+#    # 任务拒绝策略
+#    # AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。
+#    # DiscardPolicy：也是丢弃任务，但是不抛出异常。
+#    # DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程
+#    # CallerRunsPolicy：由调用线程处理该任务
+#    rejectedExecutionHandler: AbortPolicy
+#    allowCoreThreadTimeOut: true
+#  swagger:
+#    enabled: true
+#    author: huangxiaohui
+#    title: 用户服务api
+#    description: 用户服务的接口文档
+#    base-package: com.leading.userservice.domain
+#    doc-version: 0.1
+#    # api-path: api/user-service
+#  # 登录的时候是否检查header中的mac信息
+#  mac-check:
+#    enabled: false
+#  # 短信一小时最多发送条数
+#  mac:
+#    sms:
+#      frequency: 10
+#  # 短信验证码有效期 60 * 5 秒
+#  sms:
+#    validPeriod: 300
+#  shoppe:
+#    customer:
+#      default:
+#        roles:
+#          - roleName: 系统管理员
+#            roleDescription: 初始配置角色
+#            copyRoleId: 75
+#          - roleName: 财务管理员
+#            roleDescription: 初始配置角色
+#            copyRoleId: 76
+#          - roleName: 成本中心管理员
+#            roleDescription: 初始配置角色
+#            copyRoleId: 77
+#          - roleName: 普通用户
+#            roleDescription: 初始配置角色
+#            copyRoleId: 78
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  local:
+    default:
+      type: linkedhashmap
+      keyConvertor: fastjson
+      limit: 100
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson
+      uri: redis://123.57.255.100:6379/1
+      defaultExpireInMillis: 20000
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/sakila?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    driverClassName: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+  jackson:
+    time-zone: GMT+8
+  #  redis:
+  #    cluster:
+  #      nodes: 172.16.7.70:7010,172.16.7.70:7011,172.16.7.70:7012,172.16.7.70:7013,172.16.7.70:7014,172.16.7.70:7015
+  # 配置单点的redis
+  redis:
+    database: 0
+    host: 123.57.255.100
+    port: 6379
+    password:
+    timeout: 5000
+    pool:
+      max-active: 100
+      max-wait: -1
+      max-idle: 100
+      min-idle: 10
+  cache:
+    #    修改默认的cache设置
+    redis:
+      cache-null-values: false
+      time-to-live: 600000
+      use-key-prefix: true
+    type: redis
+  rabbitmq:
+    host: 123.57.255.100
+    port: 5672
+    username: admin
+    password: leading2018
+  # 邮件服务器配置
+  mail:
+    host: smtphz.qiye.163.com
+    username: serv1@66123123.net
+    password: 5v26LuSfRs
+    properties:
+      mail.debug: false
+      mail.smtp.auth: true
+      mail.smtp.port: 994
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.socketFactory: sf
+  cloud:
+    bus:
+      enabled: true
+      trace:
+        enabled: true
+    stream:
+      bindings:
+        dataToExcelFastOutput:
+          destination: erp.file.dataToExcel.fast.exchange
+          binder: local_rabbit
+        dataToExcelMiddleOutput:
+          destination: erp.file.dataToExcel.middle.exchange
+          binder: local_rabbit
+        dataToExcelSlowOutput:
+          destination: erp.file.dataToExcel.slow.exchange
+          binder: local_rabbit
+      binders:
+        local_rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: 123.57.255.100
+                port: 5672
+                username: admin
+                password: leading2018
+                virtual-host: /
+  # flyway自动构建数据库脚本
+  flyway:
+    #日志表
+    table: schema_user_service_log
+    baseline-on-migrate: true
+    #启动时不检查文件记录，建议线上为true
+    validate-on-migrate: false
+    #是否允许乱序（out of order）迁移 默认为false
+    out-of-order: true
+    url: ${sharding.jdbc.data-sources.dbmaster.url}
+    user: flywayUser
+    password: flyway123456
+    enabled: true
+    encoding: utf-8
+  # 服务链路追踪Zipkin Server地址，如果使用mq发送，就不需要了
+  #  zipkin:
+  #    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      # 链路追踪采样率
+      probability: 1.0
+      # 旧版本是这个来设置采样率
+#      percentage: 1.0
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+  #不检查中间件的连接状态，只检查服务本身的状态
+  health:
+    defaults:
+      enabled: false
+#leading:
+#  zuul:
+## leading zuul网关host
+#    host: localhost
+security:
+  oauth2:
+    leading-client:
+      clientId: leading_task
+      clientSecret: leading_task
+      grantType: client_credentials
+      access-token-uri: http://${leading.zuul.host}/api/user-service/oauth/token
+      user-authorization-uri: http://${leading.zuul.host}/api/user-service/oauth/authorize
+      scope: custom_mod
+    resource:
+      filter-order: 3
+      #微服务使用auth-server进行认证授权，在它的配置文件指定用户信息在auth-server的地址即可
+      #security:
+      #  oauth2:
+      #    resource:
+      id: user-service
+      user-info-uri: http://${leading.zuul.host}:9001/user-service/user
+      prefer-token-info: false
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    #  续约更新时间间隔（默认30秒）
+    lease-renewal-interval-in-seconds: 3
+    #  续约到期时间（默认90秒）
+    lease-expiration-duration-in-seconds: 9
+  client:
+    healthcheck:
+      enabled: true
+    # eureka client 刷新本地缓存时间(默认30s)
+    registry-fetch-interval-seconds: 5
+# eureka客户端ribbon刷新时间(默认30s)
+#ribbon:
+#  ServerListRefreshInterval: 5000
+
+#sharding:
+#  jdbc:
+#    data-sources:
+#      dbmaster:
+#        username: leading
+#        password: leading2019
+#        driverClassName: com.mysql.jdbc.Driver
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        url: jdbc:mysql://101.200.37.80:8004/LeadingDB?useUnicode=true&characterEncoding=utf-8
+#      dsslave0:
+#        username: leading
+#        password: leading2019
+#        driverClassName: com.mysql.jdbc.Driver
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        url: jdbc:mysql://101.200.37.80:8004/LeadingDB?useUnicode=true&characterEncoding=utf-8
+#      dsslave1:
+#        username: leading
+#        password: leading2019
+#        driverClassName: com.mysql.jdbc.Driver
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        url: jdbc:mysql://101.200.37.80:8004/LeadingDB?useUnicode=true&characterEncoding=utf-8
+#      dsslave2:
+#        username: leading
+#        password: leading2019
+#        driverClassName: com.mysql.jdbc.Driver
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        url: jdbc:mysql://101.200.37.80:8004/LeadingDB?useUnicode=true&characterEncoding=utf-8
+#    master-slave-rule:
+#      loadBalanceAlgorithmType: round_robin
+#      name: dataSource
+#      master-data-source-name: dbmaster
+#      slave-data-source-names: dsslave0,dsslave1,dsslave2
+#      props:
+#        sql:
+#          show: true
+
+logging:
+  level:
+    com.leading: DEBUG
+    org.springframework.security: DEBUG
+
+# 开启feign的断路器
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connect-timeout: 5000
+        read-timeout: 5000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+          # 默认的 hystrix隔离策略是THREAD，在与feign一起使用的时候拿不到ThreadLocal中的request
+          #          strategy: SEMAPHORE
+  shareSecurityContext: true
