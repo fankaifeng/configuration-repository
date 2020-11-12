@@ -72,7 +72,6 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     username: root
     password: root
-    type: com.alibaba.druid.pool.DruidDataSource
   jackson:
     time-zone: GMT+8
   #  redis:
